@@ -1,0 +1,2 @@
+抓包APP及域名在脚本内注释写着，大部分app都需要TrustMeAlready模块才能抓得到包。
+推送使用wxpusher推送，请wxpusher自行官网获取主题ID和apptoken。然后在青龙创建环境变量，变量名就是topicId和apptoken
