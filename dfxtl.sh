@@ -3,7 +3,6 @@
 #青龙创建环境变量，变量名dfxtlck，值为刚才抓的链接请求Authorization的参数。
 #ck7天有效，七天抓一次
 #by-莫老师，版本1.4
-dfxtlck=ISOFTSTONE.eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzI5MDgwNzA2NyIsImF1dGgiOiIiLCJleHAiOjE2ODUwNzM3NDl9.qEgoEVJHpJGNqhWuXdspv0UJ4dqLDmEFyP8P33Vdsc5nXvs-zgFEV-Mq-P6jC2zq_YjQojO6eLAZt37xEsORSw
 ck=($(echo $dfxtlck | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do

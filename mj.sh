@@ -1,12 +1,13 @@
 #app:MGlike，域名social.saicmg.com
 #抓token和watch-man-token
-#变量名mjck值为token的值，变量名mjfk值为watch-man-token的值
-#by-莫老师，版本1.0
-ck=($(echo $mjck | sed 's/&/ /g'))
-fk=($(echo $mjfk | sed 's/&/ /g'))
-for s in $(seq 0 1 $((${#ck[@]}-1)))
+#变量名mjck值为watch-man-token@token
+#by-莫老师，版本1.1
+zh=($(echo $mjck | sed 's/&/ /g'))
+for s in $(seq 0 1 $((${#zh[@]}-1)))
 do
-curl -o mj.json -s --http2 -X POST -H "Host: social.saicmg.com" -H "token: ${ck[$s]}" -H "watch-man-token: ${fk[$s]}" -H "content-type: application/json; charset=UTF-8" -H "content-length: 98" -d '{"token":"'${ck[$s]}'","brandCode":"2","timestamp":"'$(date +%s)'696"}' "https://social.saicmg.com/api/energy/task/app/dailySignInV2?brandCode=2" -k
+ck=$(echo ${zh[$s]} | awk -F "@" '{print $1}')
+fk=$(echo ${zh[$s]} | awk -F "@" '{print $2}')
+curl -o mj.json -s --http2 -X POST -H "Host: social.saicmg.com" -H "token: $ck" -H "watch-man-token: $fk" -H "content-type: application/json; charset=UTF-8" -H "content-length: 98" -d '{"token":"'$ck'","brandCode":"2","timestamp":"'$(date +%s)'696"}' "https://social.saicmg.com/api/energy/task/app/dailySignInV2?brandCode=2" -k
 result=$(cat mj.json | sed 's/,/\n/g' | grep "resultCode" | awk -F ":" '{print $2}')
 if [ "$result" = 200 ]; then
 jf=$(cat mj.json | sed 's/,/\n/g' | grep "point" | awk -F ":" '{print $2}')

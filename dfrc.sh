@@ -2,7 +2,7 @@
 #抓包小程序东风日产，域名community.dongfeng-nissan.com.cn抓authorization的值
 #青龙创建环境变量，变量名dfrcck，值为刚才抓的eyJ0e开头的代码，多个账号就创建多个变量
 #每日任务积分有限，最好定时0点做，ck有效期约两周
-#by-莫老师，更新日期2023-05-21，版本2.2
+#by-莫老师，更新日期2023-05-24，版本2.3
 ck=($(echo $dfrcck | sed 's/&/ /g'))
 url=community.dongfeng-nissan.com.cn
 if [ ! -f "testtzid" ]; then
@@ -27,14 +27,6 @@ if [ "$msg" = 关注成功 ]; then
 echo "日产账号$s关注成功"
 else
 gz
-fi
-}
-jq(){
-msg=$(echo -e $(curl -s -X PUT -H "Host: $url" -H "Content-Length: 2" -H "authorization: Bearer ${ck[$s]}" -H "accept: application/json" -d "{}" "https://$url/api/v2/user/feed-topics/$[$RANDOM%58+1]" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g'))
-if [ "$msg" = 申请成功 ]; then
-echo "日产账号$s加圈成功"
-else
-jq
 fi
 }
 pl(){
@@ -83,23 +75,19 @@ for y in $(seq 1 3)
 do
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do
-syrq=$(($(echo "${ck[$s]}" | awk -F "." '{print $2}' | base64 -d | sed 's/,/\n/g' | grep "exp" | awk -F ":" '{print $2}')-$(date +%s)))
-if [ "$syrq" -gt 0 ] && [ "$syrq" -lt 86400 ]; then
-echo "日产账号$s的ck将在24小时内失效"
-curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck将24小时内失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
-fi
-if [ "$syrq" -gt 0 ]; then
 ft
 let c++
-else
-echo "日产账号$s的ck失效请重新抓"
-curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
-fi
 done
 wait
 done
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do
+syrq=$(($(echo "${ck[$s]}" | awk -F "." '{print $2}' | base64 -d | sed 's/,/\n/g' | grep "exp" | awk -F ":" '{print $2}')-$(date +%s)))
+if [ "$syrq" -gt 0 ] && [ "$syrq" -lt 86400 ]; then
+echo "日产账号$s的ck将在$(($syrq/3600))小时内失效"
+curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck将'$(($syrq/3600))'小时内失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
+fi
+if [ "$syrq" -gt 0 ]; then
 for i in $(seq 1 5)
 do
 getid
@@ -107,5 +95,8 @@ pl
 echo -e "日产账号$s第$i次$(curl -s -X POST -H "Host: $url" -H "authorization: Bearer ${ck[$s]}" -H "content-type: application/json" -d "" "https://$url/api/v2/feeds/$tzid/like" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')"
 done
 gz
-jq
+else
+echo "日产账号$s的ck失效请重新抓"
+curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
+fi
 done
