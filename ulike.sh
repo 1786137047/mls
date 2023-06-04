@@ -1,7 +1,8 @@
 #!/bin/bash
 #抓包ulike小程序，抓smp-api.iyouke.com域名，抓Authorization和appid两个参数。
 #青龙创建环境变量，变量名ulike，值为appid@Authorization，多个账号就创建多个变量
-#by-莫老师，版本1.1
+#by-莫老师，版本1.2
+#cron:35 7 * * *
 zh=($(echo $ulike | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#zh[@]}-1)))
 do

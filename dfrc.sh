@@ -1,8 +1,8 @@
 #!/bin/bash
 #抓包小程序东风日产，域名community.dongfeng-nissan.com.cn抓authorization的值
 #青龙创建环境变量，变量名dfrcck，值为刚才抓的eyJ0e开头的代码，多个账号就创建多个变量
-#每日任务积分有限，最好定时0点做，ck有效期约两周
-#by-莫老师，更新日期2023-05-24，版本2.3
+#by-莫老师，版本2.4
+#cron:0 0 * * *
 ck=($(echo $dfrcck | sed 's/&/ /g'))
 url=community.dongfeng-nissan.com.cn
 if [ ! -f "testtzid" ]; then

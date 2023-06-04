@@ -2,7 +2,8 @@
 #抓包比亚迪app，打开签到页面，抓这个链接dilinkappserver.byd.com/club/?service=ForInterfaceApp.forward&serviceDir=Sign.sign_day
 #青龙创建环境变量，变量名bydck，值为刚才抓的链接请求中的request的参数，多个账号就创建多个变量。
 #7.0以上的比亚迪APP可能抓不到包，建议下载旧版本抓
-#by莫老师，版本1.5
+#by莫老师，版本1.6
+#cron:0 1 * * *
 ck=($(echo $bydck | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do

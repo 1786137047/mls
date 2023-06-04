@@ -1,7 +1,8 @@
 #app:MGlike，域名social.saicmg.com
 #抓token和watch-man-token
 #变量名mjck值为watch-man-token@token
-#by-莫老师，版本1.1
+#by-莫老师，版本1.2
+#cron:32 1 * * *
 zh=($(echo $mjck | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#zh[@]}-1)))
 do

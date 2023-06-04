@@ -1,7 +1,9 @@
 #!/bin/bash
 #抓包bbs.picovr.com，cookie中的sessionid值
 #青龙创建环境变量，变量名picock，值为抓到的sessionid，多个账号则创建多个变量。
-#by-莫老师，版本2.4
+#by-莫老师，版本2.5
+#cron:0 0 * * *
+
 ck=($(echo $picock | sed 's/&/ /g'))
 url=bbs.picovr.com
 js=0

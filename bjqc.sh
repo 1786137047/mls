@@ -1,8 +1,8 @@
 #!/bin/bash
 #抓包北京汽车app，抓beijing-gateway-customer.app-prod.bjev.com.cn域名，抓Authorization参数
 #青龙创建环境变量，变量名bjck，值为刚才抓的eyJhb开头的代码，多个账号就创建多个变量。
-#by-莫老师，更新日期2023-05-18，版本1.2
-
+#by-莫老师，版本1.3
+#cron:35 22 * * *
 ck=($(echo $bjck | sed 's/&/ /g'))
 rw=(ENTITY_LIKE GET_TASK_ATTENTION ENTITY_SHARE GET_TASK_LIKE)
 url=beijing-gateway-customer.app-prod.bjev.com.cn

@@ -3,7 +3,8 @@
 #下载注册后抓hqapp.faw.cn域名，抓Authorization和aid两个参数。
 #青龙创建环境变量，变量名hqck，值为aid@Authorization，多个账号就创建多个变量
 #一天19分，一分价值0.05
-#by-莫老师，版本1.9
+#by-莫老师，版本2.0
+#cron:35 5 * * *
 zh=($(echo $hqck | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#zh[@]}-1)))
 do

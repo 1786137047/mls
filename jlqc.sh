@@ -1,7 +1,8 @@
 #!/bin/bash
 #抓包吉利汽车app，抓app.geely.com域名，抓token参数
 #青龙创建环境变量，变量名jlck，值为刚才抓的token，多个账号就创建多个变量。
-#by-莫老师，版本1.1
+#by-莫老师，版本1.2
+#cron:35 2 * * *
 ck=($(echo $jlck | sed 's/&/ /g'))
 url=app.geely.com
 for s in $(seq 0 1 $((${#ck[@]}-1)))

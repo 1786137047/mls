@@ -2,7 +2,9 @@
 #app:上汽荣威，域名social.roewe.com.cn
 #抓token和watch-man-token
 #变量名rwck值为watch-man-token@token
-#BY-莫老师，版本1.4
+#BY-莫老师，版本1.5
+#cron:35 6 * * *
+
 zh=($(echo $rwck | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#zh[@]}-1)))
 do
