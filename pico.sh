@@ -1,7 +1,7 @@
 #!/bin/bash
 #抓包bbs.picovr.com，cookie中的sessionid值
 #青龙创建环境变量，变量名picock，值为抓到的sessionid，多个账号则创建多个变量。
-#by-莫老师，版本2.3
+#by-莫老师，版本2.4
 ck=($(echo $picock | sed 's/&/ /g'))
 url=bbs.picovr.com
 js=0
@@ -33,18 +33,17 @@ if [ -z "$title" ]; then
 title=每日一言
 fi
 length=$(($(echo $content$content$title | awk '{print length($0)}')+123))
-tzid=$(curl -s -X POST -H "Host: $url" -H "Content-Length: $length" -H "Cookie: sessionid=${ck[$i]}" -H "Content-Type: application/json; charset=UTF-8" -H "User-Agent: com.picovr.assistantphone/294 (Linux; U; Android 11; zh_CN; Mi 10; Build/RKQ1.200826.002; Cronet/TTNetVersion:3a37693c 2022-02-10 QuicVersion:775bd845 2021-12-24)" -d '{"category_ids":["170"],"content":{"abstract":"'$content'","content":"'$content'","item_type":2,"mime_type":"html","name":"'$title'"},"need_publish":1}' "https://$url/ttarch/api/content/v1/content/create?app_id=8641" -k | sed 's/,/\n/g' | grep "item_id" | awk -F ":" '{print $3}' | sed 's/}//g' | sed 's/\"//g')
-echo "pico账号$i帖子id为$tzid"
-sleep $[$RANDOM%60]s
-for p in $(seq 1 2)
+echo "pico账号$i帖子id为$(curl -s -X POST -H "Host: $url" -H "Content-Length: $length" -H "Cookie: sessionid=${ck[$i]}" -H "Content-Type: application/json; charset=UTF-8" -H "User-Agent: com.picovr.assistantphone/294 (Linux; U; Android 11; zh_CN; Mi 10; Build/RKQ1.200826.002; Cronet/TTNetVersion:3a37693c 2022-02-10 QuicVersion:775bd845 2021-12-24)" -d '{"category_ids":["170"],"content":{"abstract":"'$content'","content":"'$content'","item_type":2,"mime_type":"html","name":"'$title'"},"need_publish":1}' "https://$url/ttarch/api/content/v1/content/create?app_id=8641" -k | sed 's/,/\n/g' | grep "item_id" | awk -F ":" '{print $3}' | sed 's/}//g' | sed 's/\"//g')"
+ids=($(curl -s --http2 -X GET -H "Host:bbs.picoxr.com" "https://bbs.picoxr.com/ttarch/api/content/v1/content/list_by_pool_page?app_id=264482&page_size=20&page_index=27930&pool_type=0&category_id=170&item_type=2&sort_type=1&service_id=0&lang=zh-Hans-CN&web_id=7223551455834687014" -k | sed 's/,/\n/g' | sed 's/\[/\n/g' | grep "item_id" | grep "content" | awk -F ":"  '{print $3}' | sed 's/"//g'))
+for p in $(seq 2)
 do
 comment=$(echo ${yy[$js]} | awk -F "," '{print $2}')
 let js++
 if [ -z "$comment" ]; then
 comment=666666
 fi
-length=$(($(echo $comment$tzid | awk '{print length($0)}')+53))
-echo "pico账号$i评论第$p次$(curl -s -X POST -H "Host: $url" -H "Content-Length: $length" -H "Cookie: sessionid=${ck[$i]}" -H "Content-Type: application/json; charset=UTF-8" -H "User-Agent: com.picovr.assistantphone/294 (Linux; U; Android 11; zh_CN; Mi 10; Build/RKQ1.200826.002; Cronet/TTNetVersion:3a37693c 2022-02-10 QuicVersion:775bd845 2021-12-24)" -d '{"comment":{"content":"'$comment'","item_id":"'$tzid'","item_type":2}}' "https://$url/ttarch/api/interact/v1/comment/create?app_id=8641" -k | sed 's/,/\n/g' | grep "err_no" | awk -F ":" '{print $2}' | sed 's/\"//g')"
+length=$(($(echo $comment${ids[$p]} | awk '{print length($0)}')+53))
+echo "pico账号$i评论第$p次$(curl -s -X POST -H "Host: $url" -H "Content-Length: $length" -H "Cookie: sessionid=${ck[$i]}" -H "Content-Type: application/json; charset=UTF-8" -H "User-Agent: com.picovr.assistantphone/294 (Linux; U; Android 11; zh_CN; Mi 10; Build/RKQ1.200826.002; Cronet/TTNetVersion:3a37693c 2022-02-10 QuicVersion:775bd845 2021-12-24)" -d '{"comment":{"content":"'$comment'","item_id":"'${ids[$p]}'","item_type":2}}' "https://$url/ttarch/api/interact/v1/comment/create?app_id=8641" -k | sed 's/,/\n/g' | grep "err_no" | awk -F ":" '{print $2}' | sed 's/\"//g')"
 sleep $[$RANDOM%60]s
 done
 curl -s -o pico.json -X GET -H "Host: $url" -H "Cookie: sessionid=${ck[$i]}" -H "User-Agent: com.picovr.assistantphone/294 (Linux; U; Android 11; zh_CN; Mi 10; Build/RKQ1.200826.002; Cronet/TTNetVersion:3a37693c 2022-02-10 QuicVersion:775bd845 2021-12-24)" "https://$url/ttarch/api/growth/v1/user/get?aid=8641" -k
