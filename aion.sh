@@ -2,6 +2,7 @@
 #抓PHPSESSID
 #变量名aack值为PHPSESSID的值
 #by莫老师，版本1.0
+#cron:35 0 * * *
 ck=($(echo $aack | sed 's/&/ /g'))
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do
