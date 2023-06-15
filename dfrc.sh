@@ -1,7 +1,7 @@
 #!/bin/bash
 #抓包小程序东风日产，域名community.dongfeng-nissan.com.cn抓authorization的值
 #青龙创建环境变量，变量名dfrcck，值为刚才抓的eyJ0e开头的代码，多个账号就创建多个变量
-#by-莫老师，版本2.4
+#by-莫老师，版本2.5
 #cron:0 0 * * *
 ck=($(echo $dfrcck | sed 's/&/ /g'))
 url=community.dongfeng-nissan.com.cn
@@ -55,7 +55,7 @@ sleep $[$RANDOM%10]s
 ft
 fi
 }
-if [ "$(date +%d)" -eq 16 ]; then
+if [ "$(date +%d)" -eq 15 ]; then
 curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号抽奖次数今日将会清零，请尽快登录小程序，使用抽奖次数","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
 fi
 for s in $(seq 1 ${#ck[@]})
@@ -71,7 +71,7 @@ done
 yy=($(cat yy | sed 's/\n/ /g'))
 rm -rf yy
 c=0
-for y in $(seq 1 3)
+for y in $(seq 4)
 do
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do
