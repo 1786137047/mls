@@ -1,5 +1,6 @@
 #!/bin/bash
 #东风日产
+#新用户请走邀请链接下载可得30积分https://oneapph5.dongfeng-nissan.com.cn/oneapp/inviteBindCar?urlData=2HuCYYTn5BB%2FrBQI%2FpKH%2FZX0VYSPsqBWb6opaO9uaizK9x%2BTGaECIC%2FHeRf19vcwyYNVb%2B%2BLgUaXXPPze5JfAg%3D%3D
 #抓app，域名oneapph5.dongfeng-nissan.com.cn抓token，sign，noncestr，timestamp的值
 #青龙创建环境变量，变量名dfrcck，格式为token@sign@noncestr@timestamp
 #by-莫老师，版本3.0
