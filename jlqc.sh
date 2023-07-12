@@ -1,14 +1,14 @@
 #!/bin/bash
 #抓包吉利汽车app，抓app.geely.com域名，抓token参数
 #青龙创建环境变量，变量名jlck，值为刚才抓的token，多个账号就创建多个变量。
-#by-莫老师，版本1.2
+#by-莫老师，版本1.3
 #cron:35 2 * * *
 ck=($(echo $jlck | sed 's/&/ /g'))
 url=app.geely.com
 for s in $(seq 0 1 $((${#ck[@]}-1)))
 do
-qd=$(curl -s --http2 -X POST -H "Host: $url" -H "content-length: 34" -H "token: ${ck[$s]}" -H "content-type:application/json" -d '{"signDate":"'$(date +%Y-%m-%d)' '$(date +%H:%M:%S)'"}' "https://$url/api/v1/userSign/sign" -k | sed 's/,/\n/g' | grep "message" | awk -F ":" '{print $2}' | sed 's/}//g' | sed 's/\"//g')
-if [ "$qd" = token.unchecked ]; then
+qd=$(curl -s --http2 -X POST -H "Host: $url" -H "content-length: 34" -H "token: ${ck[$s]}" -H "content-type:application/json" -d '{"signDate":"'$(date +%Y-%m-%d)' '$(date +%H:%M:%S)'"}' "https://$url/api/v1/userSign/sign" -k | sed 's/,/\n/g' | grep "code" | awk -F ":" '{print $2}' | sed 's/}//g' | sed 's/\"//g')
+if [ "$qd" = fail ]; then
 echo "吉利账号$s的ck失效请重新抓"
 curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"吉利账号'$s'的ck失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
 else
