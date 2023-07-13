@@ -32,12 +32,22 @@ if echo "$msg" | grep -q "成功"; then
 echo "日产账号$s第$i次$msg"
 elif echo "$msg" | grep -q "无效"; then
 echo "日产账号$s的ck失效请重新抓"
-break
+continue
 fi
 }
 if [ "$(date +%d)" -eq 16 ]; then
 curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号抽奖次数今日将会清零，请尽快登录小程序，使用抽奖次数","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
 fi
+for s in $(seq 0 1 $((${#ck[@]}-1)))
+do
+msg=$(echo -e "$(curl -s -X GET -H "token: ${ck[$s]}" -H "Host: $url" "https://$url/mb-gw/dndc-gateway/community/api/v2/feed-themes/get_index" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')")
+if echo "$msg" | grep -q "成功"; then
+echo "日产账号$s$msg"
+elif echo "$msg" | grep -q "无效"; then
+echo "日产账号$s的ck失效请重新抓"
+curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
+fi
+done
 for i in $(seq 4)
 do
 for s in $(seq 0 1 $((${#ck[@]}-1)))
@@ -49,28 +59,14 @@ length=$(($(echo $content$title | awk '{print length($0)}')+159))
 msg=$(echo -e "$(curl -s -X POST -H "clientid: nissanapp" -H "token: ${ck[$s]}" -H "Content-Type: application/json" -H "Content-Length: $length" -H "Host: $url" -d '{"feed_mark":'$(date +%s)'000,"feed_title":"'$title'","themes":[],"feeds_type":2,"feed_from":2,"app_feed_content":[{"content":{"height":0,"text":"'$content'","width":0},"type":1}]}' "https://$url/mb-gw/dndc-gateway/community/api/v2/feeds" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')")
 if echo "$msg" | grep -q "成功"; then
 echo "日产账号$s第$i次$msg"
+getid
+pl
+echo -e "日产账号$s第$i次$(curl -s -X POST -H "appVersion: 3.0.0" -H "token: ${ck[$s]}" -H "Content-Length: 2" -H "Host: $url" -d "{}" "https://$url/mb-gw/dndc-gateway/community/api/v2/feeds/$tzid/like" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')"
 elif echo "$msg" | grep -q "无效"; then
 echo "日产账号$s的ck失效请重新抓"
-break
+continue
 fi
 rm -rf *.json
 done
 wait
-done
-for s in $(seq 0 1 $((${#ck[@]}-1)))
-do
-msg=$(echo -e "$(curl -s -X GET -H "token: ${ck[$s]}" -H "Host: $url" "https://$url/mb-gw/dndc-gateway/community/api/v2/feed-themes/get_index" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')")
-if echo "$msg" | grep -q "成功"; then
-echo "日产账号$s$msg"
-for i in $(seq 5)
-do
-getid
-pl
-echo -e "日产账号$s第$i次$(curl -s -X POST -H "appVersion: 3.0.0" -H "token: ${ck[$s]}" -H "Content-Length: 2" -H "Host: $url" -d "{}" "https://$url/mb-gw/dndc-gateway/community/api/v2/feeds/$tzid/like" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}' | sed 's/\"//g')"
-done
-elif echo "$msg" | grep -q "无效"; then
-echo "日产账号$s的ck失效请重新抓"
-curl -s -X POST -H "Host: wxpusher.zjiecode.com" -H "Content-Type: application/json" -d '{"appToken":"'$apptoken'","content":"日产账号'$s'的ck失效请重新抓","contentType":1,"topicIds":['$topicId'], "url":"https://wxpusher.zjiecode.com","verifyPay":false}' "https://wxpusher.zjiecode.com/api/send/message" -k | sed 's/,/\n/g' | grep "msg" | awk -F ":" '{print $2}'
-continue
-fi
 done
